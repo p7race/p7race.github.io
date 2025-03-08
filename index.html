@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>0xvernik Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: lightcyan;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .logo {
+        width: 100px;
+        height: auto;
+        margin-bottom: 20px;
+      }
+      .title {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-size: 48px;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 30px;
+      }
+      .boxes {
+        display: flex;
+        justify-content: space-around;
+        width: 80%;
+        max-width: 800px;
+      }
+      .box {
+        width: 150px;
+        height: 150px;
+        border: 2px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: black;
+        background-color: white;
+        transition: background-color 0.3s;
+      }
+      .box:hover {
+        background-color: #f0f0f0;
+      }
+      .platform-icon {
+        font-size: 60px;
+      }
+      a {
+        text-decoration: none;
+      }
+      @media (max-width: 600px) {
+        .boxes {
+          flex-direction: column;
+          align-items: center;
+        }
+        .box {
+          margin: 10px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="logo-pin.png" alt="0xvernik Logo" class="logo" />
+      <h1 class="title">0xvernik</h1>
+      <div class="boxes">
+        <a href="https://discord.gg/BYDhFeVKPz">
+          <div class="box"><i class="fab fa-discord platform-icon"></i></div>
+        </a>
+        <a href="https://www.geoguessr.com/user/5d6b65e5b4ec17864c52e211">
+          <div class="box"><i class="fas fa-globe platform-icon"></i></div>
+        </a>
+        <a href="https://github.com/p7race">
+          <div class="box"><i class="fab fa-github platform-icon"></i></div>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
