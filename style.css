@@ -94,9 +94,9 @@ nav a:hover::after {
 .tag-filter {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
-  margin: 40px 0 0 0;
-  padding: 0 20px;
+  margin: 40px 20px 0 20px;
 }
 .tag-btn {
   background: transparent;
@@ -394,19 +394,6 @@ footer {
   color: #e6e6e6;
 }
 
-.social-links-about a {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 12px;
-  padding: 10px 0;
-  color: #a9a9a9;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.social-links-about a:hover {
-  color: #00c4b3;
-}
-
 /* --- Archive Page Specific Styles --- */
 .archive-list h3 {
   font-size: 1.8rem;
@@ -478,7 +465,6 @@ footer {
     gap: 25px;
   }
   .tag-filter {
-    flex-wrap: wrap;
     gap: 10px;
   }
 }

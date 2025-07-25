@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ptrace - CTF Writeups</title>
+    <title>ptrace - cybersec blog</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,7 +17,7 @@
       <header>
         <div class="site-title">
           <h1><a href="index.html">ptrace</a></h1>
-          <p>CTF Writeups & Security Research</p>
+          <p>cybersec blog</p>
         </div>
         <nav>
           <a href="index.html">Home</a>
@@ -25,6 +25,17 @@
           <a href="about.html">About</a>
         </nav>
       </header>
+
+      <section class="tag-filter">
+        <button class="tag-btn active" data-tag="all">All</button>
+        <button class="tag-btn" data-tag="web">#web</button>
+        <button class="tag-btn" data-tag="crypto">#crypto</button>
+        <button class="tag-btn" data-tag="reversing">#reversing</button>
+        <button class="tag-btn" data-tag="osint">#osint</button>
+        <button class="tag-btn" data-tag="pwn">#pwn</button>
+        <button class="tag-btn" data-tag="sqli">#sqli</button>
+        <button class="tag-btn" data-tag="beginner">#beginner</button>
+      </section>
 
       <main>
         <div id="post-list-container" class="post-list">
@@ -47,9 +58,12 @@
           (a, b) => new Date(b.date) - new Date(a.date)
         );
 
+        // 1. Generate all post cards from posts.js
         sortedPosts.forEach((post) => {
           const postCard = document.createElement("article");
           postCard.className = "post-card";
+          // Add data-tags attribute for filtering
+          postCard.setAttribute("data-tags", post.tags.join(" "));
 
           const postDate = new Date(post.date);
           const formattedDate = postDate.toLocaleDateString("en-US", {
@@ -60,7 +74,7 @@
 
           let tagsHTML = "";
           post.tags.forEach((tag) => {
-            tagsHTML += `<a href="#">#${tag}</a>`;
+            tagsHTML += `<a href="#" class="post-tag-link">#${tag}</a>`;
           });
 
           postCard.innerHTML = `
@@ -75,6 +89,48 @@
             </div>
           `;
           postListContainer.appendChild(postCard);
+        });
+
+        // 2. Set up the filtering logic
+        const filterButtons = document.querySelectorAll(".tag-filter .tag-btn");
+        const postCards = document.querySelectorAll(".post-card");
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const filterTag = button.getAttribute("data-tag");
+
+            // Update active state on buttons
+            filterButtons.forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            // Show or hide post cards based on tag
+            postCards.forEach((card) => {
+              const cardTags = card.getAttribute("data-tags");
+              if (
+                filterTag === "all" ||
+                (cardTags && cardTags.includes(filterTag))
+              ) {
+                card.style.display = "block";
+              } else {
+                card.style.display = "none";
+              }
+            });
+          });
+        });
+
+        // 3. Set up listeners for tags inside post cards
+        postListContainer.addEventListener("click", (e) => {
+          if (e.target.matches(".post-tag-link")) {
+            e.preventDefault(); // Prevent jumping to top of page
+            const tagName = e.target.innerText.substring(1); // Get tag name without '#'
+
+            const matchingButton = document.querySelector(
+              `.tag-filter .tag-btn[data-tag="${tagName}"]`
+            );
+            if (matchingButton) {
+              matchingButton.click(); // Programmatically click the main filter button
+            }
+          }
         });
       });
     </script>
