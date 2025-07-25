@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ptrace - CTF Writeups</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&family=Fira+Code:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="site-title">
+          <h1><a href="index.html">ptrace</a></h1>
+          <p>CTF Writeups & Security Research</p>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="archive.html">Archive</a>
+          <a href="about.html">About</a>
+        </nav>
+      </header>
+
+      <main>
+        <div id="post-list-container" class="post-list">
+          <!-- Posts will be dynamically inserted here -->
+        </div>
+      </main>
+
+      <footer>
+        <p>© 2025 ptrace</p>
+      </footer>
+    </div>
+
+    <script src="posts.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const postListContainer = document.getElementById(
+          "post-list-container"
+        );
+        const sortedPosts = posts.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        sortedPosts.forEach((post) => {
+          const postCard = document.createElement("article");
+          postCard.className = "post-card";
+
+          const postDate = new Date(post.date);
+          const formattedDate = postDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          let tagsHTML = "";
+          post.tags.forEach((tag) => {
+            tagsHTML += `<a href="#">#${tag}</a>`;
+          });
+
+          postCard.innerHTML = `
+            <div class="post-meta">
+              <time datetime="${post.date}">${formattedDate}</time>
+            </div>
+            <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
+            <p>${post.summary}</p>
+            <div class="post-footer">
+              <span class="tags">${tagsHTML}</span>
+              <a href="post.html?slug=${post.slug}" class="read-more">Read More →</a>
+            </div>
+          `;
+          postListContainer.appendChild(postCard);
+        });
+      });
+    </script>
+  </body>
+</html>

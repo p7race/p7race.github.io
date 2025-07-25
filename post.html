@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post - ptrace</title>
+    <!-- Title will be updated by JS -->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&family=Fira+Code:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="site-title">
+          <h1><a href="index.html">ptrace</a></h1>
+          <p>CTF Writeups & Security Research</p>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="archive.html">Archive</a>
+          <a href="about.html">About</a>
+        </nav>
+      </header>
+
+      <main>
+        <div class="post-content" id="post-content-container">
+          <!-- Post header and content will be injected here -->
+        </div>
+      </main>
+
+      <footer>
+        <p>© 2025 ptrace</p>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="posts.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const postContentContainer = document.getElementById(
+          "post-content-container"
+        );
+        const urlParams = new URLSearchParams(window.location.search);
+        const postSlug = urlParams.get("slug");
+
+        if (!postSlug) {
+          postContentContainer.innerHTML =
+            "<h1>Post not found.</h1><p>Please provide a post slug.</p>";
+          return;
+        }
+
+        const post = posts.find((p) => p.slug === postSlug);
+
+        if (!post) {
+          postContentContainer.innerHTML =
+            "<h1>Post not found.</h1><p>The requested post does not exist.</p>";
+          return;
+        }
+
+        document.title = `${post.title} - ptrace`;
+
+        fetch(`posts/${post.slug}.md`) // Changed to relative path
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.text();
+          })
+          .then((markdown) => {
+            const postDate = new Date(post.date);
+            const formattedDate = postDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+            let tagsHTML = "";
+            post.tags.forEach((tag) => {
+              tagsHTML += `<a href="#">#${tag}</a>`;
+            });
+
+            const headerHTML = `
+                    <div class="post-header">
+                        <h1>${post.title}</h1>
+                        <div class="post-meta">
+                            <time datetime="${post.date}">${formattedDate}</time>
+                            <span class="tags">${tagsHTML}</span>
+                        </div>
+                    </div>
+                `;
+
+            const contentHTML = marked.parse(markdown);
+
+            const footerHTML = `
+                    <hr>
+                    <div class="back-to-home">
+                        <a href="index.html">← Back to All Posts</a>
+                    </div>
+                `;
+
+            postContentContainer.innerHTML =
+              headerHTML + contentHTML + footerHTML;
+          })
+          .catch((error) => {
+            console.error("Error fetching post:", error);
+            postContentContainer.innerHTML =
+              "<h1>Error</h1><p>Could not load the post content.</p>";
+          });
+      });
+    </script>
+  </body>
+</html>

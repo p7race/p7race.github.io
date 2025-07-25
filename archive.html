@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archive - ptrace</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&family=Fira+Code:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="site-title">
+          <h1><a href="index.html">ptrace</a></h1>
+          <p>CTF Writeups & Security Research</p>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="archive.html">Archive</a>
+          <a href="about.html">About</a>
+        </nav>
+      </header>
+
+      <main>
+        <div class="page-header">
+          <h2>Content Archive</h2>
+          <p class="subtitle">A complete list of all posts.</p>
+        </div>
+
+        <div id="archive-list-container" class="archive-list">
+          <!-- Archive list will be dynamically inserted here -->
+        </div>
+      </main>
+
+      <footer>
+        <p>© 2025 ptrace</p>
+      </footer>
+    </div>
+
+    <script src="posts.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const archiveListContainer = document.getElementById(
+          "archive-list-container"
+        );
+        const sortedPosts = posts.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        const postsByYear = {};
+
+        sortedPosts.forEach((post) => {
+          const year = new Date(post.date).getFullYear();
+          if (!postsByYear[year]) {
+            postsByYear[year] = [];
+          }
+          postsByYear[year].push(post);
+        });
+
+        const sortedYears = Object.keys(postsByYear).sort((a, b) => b - a);
+
+        sortedYears.forEach((year) => {
+          const section = document.createElement("section");
+          section.className = "archive-year";
+
+          const heading = document.createElement("h3");
+          heading.textContent = year;
+          section.appendChild(heading);
+
+          const ul = document.createElement("ul");
+          postsByYear[year].forEach((post) => {
+            const postDate = new Date(post.date);
+            const formattedDate = postDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            });
+
+            const li = document.createElement("li");
+            li.innerHTML = `
+                    <a href="post.html?slug=${post.slug}">${post.title}</a>
+                    <time>${formattedDate}</time>
+                `;
+            ul.appendChild(li);
+          });
+          section.appendChild(ul);
+          archiveListContainer.appendChild(section);
+        });
+      });
+    </script>
+  </body>
+</html>
